@@ -1,48 +1,33 @@
 #!/usr/bin/ruby
 
-class Part1
-  def self.run(inputs)
-    horizontal = 0
-    depth = 0
-
-    inputs.each do |direction, amount|
-      case direction
-      when 'forward'
-        horizontal += amount.to_i
-      when 'down'
-        depth += amount.to_i
-      when 'up'
-        depth -= amount.to_i
-      end
+def part1(input)
+  input.each_with_object({ horizontal: 0, depth: 0 }) do |(direction, amount), hash|
+    case direction
+    when 'forward'
+      hash[:horizontal] += amount.to_i
+    when 'down'
+      hash[:depth] += amount.to_i
+    when 'up'
+      hash[:depth] -= amount.to_i
     end
-
-    horizontal * depth
-  end
+  end.values.inject(:*)
 end
 
-class Part2
-  def self.run(inputs)
-    horizontal = 0
-    depth = 0
-    aim = 0
-
-    inputs.each do |direction, amount|
-      case direction
-      when 'forward'
-        horizontal += amount.to_i
-        depth += amount.to_i * aim
-      when 'down'
-        aim += amount.to_i
-      when 'up'
-        aim -= amount.to_i
-      end
+def part2(input)
+  input.each_with_object({ horizontal: 0, depth: 0, aim: 0 }) do |(direction, amount), hash|
+    case direction
+    when 'forward'
+      hash[:horizontal] += amount.to_i
+      hash[:depth] += amount.to_i * hash[:aim]
+    when 'down'
+      hash[:aim] += amount.to_i
+    when 'up'
+      hash[:aim] -= amount.to_i
     end
-
-    horizontal * depth
-  end
+  end.fetch_values(:horizontal, :depth).inject(:*)
 end
 
-inputs = File.readlines('inputs/day02.txt').map { |input| input.split(' ') }
+input = File.readlines('inputs/day02.txt').map { |line| line.split(' ') }
 
-puts "Day02::Part1 answer: #{Part1.run(inputs)}"
-puts "Day02::Part2 answer: #{Part2.run(inputs)}"
+puts "Day02::Part1 answer: #{part1(input)}"
+puts "Day02::Part2 answer: #{part2(input)}"
