@@ -3,28 +3,23 @@
 require 'matrix'
 
 def generate_straight_line(starting, ending)
-  start_x, start_y = starting
-  end_x, end_y = ending
+  x1, y1 = starting
+  x2, y2 = ending
 
-  Range.new(*[start_x, end_x].sort).flat_map do |i|
-    Range.new(*[start_y, end_y].sort).collect do |j|
-      [i, j]
-    end
-  end
+  xs = x1 == x2 ? [x1] : (x1..x2).step(x2 <=> x1).to_a
+  ys = y1 == y2 ? [y1] : (y1..y2).step(y2 <=> y1).to_a
+
+  xs.product(ys)
 end
 
 def generate_diagonal_line(starting, ending)
-  start_x, start_y = starting
-  end_x, end_y = ending
+  x1, y1 = starting
+  x2, y2 = ending
 
-  steps = (end_x - start_x).abs
+  xs = (x1..x2).step(x2 <=> x1)
+  ys = (y1..y2).step(y2 <=> y1)
 
-  steps.times.collect do |i|
-    right = [start_x, end_x].min == start_x
-    down = [start_y, end_y].min == start_y
-
-    [(right ? start_x + i : start_x - i), (down ? start_y + i : start_y - i)]
-  end.push(ending)
+  xs.zip(ys)
 end
 
 def run(input, include_diagonals: false)
