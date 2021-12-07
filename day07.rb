@@ -9,8 +9,12 @@ def part1(input)
 end
 
 def part2(input)
-  average = ((input.sum.to_f - input.size) / input.size).round
-  input.sum { |crab| (1..(average - crab).abs).inject(0, :+) }
+  average = input.sum.to_f / input.size
+
+  round_down = input.sum { |crab| (1..(average.floor - crab).abs).inject(0, :+) }
+  round_up = input.sum { |crab| (1..(average.ceil - crab).abs).inject(0, :+) }
+
+  [round_down, round_up].min
 end
 
 input = File.read('inputs/day07.txt').split(',').map(&:to_i)
